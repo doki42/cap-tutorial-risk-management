@@ -49,9 +49,9 @@ modules:
           TokenServiceKeyName: cpapp-uaa-key
           URL: ~{srv-api/srv-url}
           sap.cloud.service: cpapp.service
-        - Name: cpapp-html5-repo-host
-          ServiceInstanceName: cpapp-html5-repo-host
-          ServiceKeyName: cpapp-html5-repo-host-key
+        - Name: cpapp-repo-host
+          ServiceInstanceName: cpapp-repo-host
+          ServiceKeyName: cpapp-repo-host-key
           sap.cloud.service: cpapp.service
         - Authentication: OAuth2UserTokenExchange
           Name: cpapp-uaa
