@@ -8,7 +8,7 @@ modules:
   path: gen/srv
   requires:
   - name: cpapp-db
-  - name: cpapp-auth
+  - name: cpapp-uaa
   provides:
   - name: srv-api
     properties:
@@ -24,6 +24,43 @@ modules:
   - name: cpapp-db
   parameters:
     buildpack: nodejs_buildpack
+- name: cpapp-destinations
+  type: com.sap.application.content
+  requires:
+  - name: cpapp-uaa
+    parameters:
+      service-key:
+        name: cpapp-uaa-key
+  - name: cpapp-repo-host
+    parameters:
+      service-key:
+        name: cpapp-html5-repo-host-key
+  - name: srv-api
+  - name: cpapp-destination
+    parameters:
+      content-target: true
+  parameters:
+    content:
+      instance:
+        destinations:
+        - Authentication: OAuth2UserTokenExchange
+          Name: cpapp-app-srv
+          TokenServiceInstanceName: cpapp-uaa
+          TokenServiceKeyName: cpapp-uaa-key
+          URL: ~{srv-api/srv-url}
+          sap.cloud.service: cpapp.service
+        - Name: cpapp-html5-repo-host
+          ServiceInstanceName: cpapp-html5-repo-host
+          ServiceKeyName: cpapp-html5-repo-host-key
+          sap.cloud.service: cpapp.service
+        - Authentication: OAuth2UserTokenExchange
+          Name: cpapp-uaa
+          ServiceInstanceName: cpapp-uaa
+          ServiceKeyName: cpapp-uaa-key
+          sap.cloud.service: cpapp.service
+        existing_destinations_policy: update
+  build-parameters:
+    no-source: true
 - name: cpapp-app-content
   type: com.sap.application.content
   path: .
@@ -68,10 +105,19 @@ resources:
   parameters:
     service: hana
     service-plan: hdi-shared
-- name: cpapp-auth
+- name: cpapp-uaa
   type: org.cloudfoundry.managed-service
   parameters:
     config:
+      role-collections:
+      - description: Manage Risks
+        name: RiskManager-${space}
+        role-template-references:
+        - $XSAPPNAME.RiskManager
+      - description: View Risks
+        name: RiskViewer-${space}
+        role-template-references:
+        - $XSAPPNAME.RiskViewer
       tenant-mode: dedicated
       xsappname: cpapp-${org}-${space}
     path: ./xs-security.json
@@ -83,11 +129,11 @@ resources:
     service: html5-apps-repo
     service-name: cpapp-html5-srv
     service-plan: app-host
-- name: cpapp-destination-service
+- name: cpapp-destination
   type: org.cloudfoundry.managed-service
   parameters:
     config:
-      HTML5Runtime_enabled: false
+      HTML5Runtime_enabled: true
       init_data:
         instance:
           destinations:
@@ -99,7 +145,7 @@ resources:
           existing_destinations_policy: update
       version: 1.0.0
     service: destination
-    service-name: cpapp-destination-service
+    service-name: cpapp-destination
     service-plan: lite
 parameters:
   deploy_mode: html5-repo
@@ -108,4 +154,6 @@ build-parameters:
   before-all:
   - builder: custom
     commands:
+    - npm install --production
     - npx -p @sap/cds-dk cds build --production
+    - npx rimraf gen/db/src/gen/data
