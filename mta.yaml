@@ -9,19 +9,20 @@ modules:
   requires:
   - name: cpapp-db
   - name: cpapp-uaa
+  - name: cpapp-logs
   provides:
   - name: srv-api
     properties:
       srv-url: ${default-url}
   parameters:
     buildpack: nodejs_buildpack
-  build-parameters:
-    builder: npm-ci
 - name: cpapp-db-deployer
   type: hdb
   path: gen/db
   requires:
   - name: cpapp-db
+  - name: cpapp-uaa
+  - name: cpapp-logs
   parameters:
     buildpack: nodejs_buildpack
 - name: cpapp-destinations
@@ -31,7 +32,7 @@ modules:
     parameters:
       service-key:
         name: cpapp-uaa-key
-  - name: cpapp-repo-host
+  - name: cpapp-html5-repo-host
     parameters:
       service-key:
         name: cpapp-html5-repo-host-key
@@ -49,9 +50,9 @@ modules:
           TokenServiceKeyName: cpapp-uaa-key
           URL: ~{srv-api/srv-url}
           sap.cloud.service: cpapp.service
-        - Name: cpapp-repo-host
-          ServiceInstanceName: cpapp-repo-host
-          ServiceKeyName: cpapp-repo-host-key
+        - Name: cpapp-html5-repo-host
+          ServiceInstanceName: cpapp-html5-repo-host
+          ServiceKeyName: cpapp-html5-repo-host-key
           sap.cloud.service: cpapp.service
         - Authentication: OAuth2UserTokenExchange
           Name: cpapp-uaa
@@ -65,7 +66,7 @@ modules:
   type: com.sap.application.content
   path: .
   requires:
-  - name: cpapp-repo-host
+  - name: cpapp-html5-repo-host
     parameters:
       content-target: true
   build-parameters:
@@ -105,6 +106,8 @@ resources:
   parameters:
     service: hana
     service-plan: hdi-shared
+  properties:
+    hdi-service-name: ${service-name}
 - name: cpapp-uaa
   type: org.cloudfoundry.managed-service
   parameters:
@@ -119,16 +122,10 @@ resources:
         role-template-references:
         - $XSAPPNAME.RiskViewer
       tenant-mode: dedicated
-      xsappname: cpapp-${org}-${space}
+      xsappname: cpapp-${space}
     path: ./xs-security.json
     service: xsuaa
     service-plan: application
-- name: cpapp-repo-host
-  type: org.cloudfoundry.managed-service
-  parameters:
-    service: html5-apps-repo
-    service-name: cpapp-html5-srv
-    service-plan: app-host
 - name: cpapp-destination
   type: org.cloudfoundry.managed-service
   parameters:
@@ -145,8 +142,17 @@ resources:
           existing_destinations_policy: update
       version: 1.0.0
     service: destination
-    service-name: cpapp-destination
     service-plan: lite
+- name: cpapp-html5-repo-host
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: html5-apps-repo
+    service-plan: app-host
+- name: cpapp-logs
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: application-logs
+    service-plan: lite    
 parameters:
   deploy_mode: html5-repo
   enable-parallel-deployments: true
