@@ -1,6 +1,100 @@
 {
-  "namespace": "sap.ui.riskmanagement",
+  "namespace": "sap.ui.alertmanagement",
   "definitions": {
+    "sap.ui.alertmanagement.Alerts": {
+      "kind": "entity",
+      "includes": [
+        "managed"
+      ],
+      "elements": {
+        "createdAt": {
+          "@cds.on.insert": {
+            "=": "$now"
+          },
+          "@UI.HiddenFilter": true,
+          "@Core.Immutable": true,
+          "@title": "{i18n>CreatedAt}",
+          "@readonly": true,
+          "type": "cds.Timestamp"
+        },
+        "createdBy": {
+          "@cds.on.insert": {
+            "=": "$user"
+          },
+          "@UI.HiddenFilter": true,
+          "@Core.Immutable": true,
+          "@title": "{i18n>CreatedBy}",
+          "@readonly": true,
+          "@description": "{i18n>UserID.Description}",
+          "type": "User",
+          "length": 255
+        },
+        "modifiedAt": {
+          "@cds.on.insert": {
+            "=": "$now"
+          },
+          "@cds.on.update": {
+            "=": "$now"
+          },
+          "@UI.HiddenFilter": true,
+          "@title": "{i18n>ChangedAt}",
+          "@readonly": true,
+          "type": "cds.Timestamp"
+        },
+        "modifiedBy": {
+          "@cds.on.insert": {
+            "=": "$user"
+          },
+          "@cds.on.update": {
+            "=": "$user"
+          },
+          "@UI.HiddenFilter": true,
+          "@title": "{i18n>ChangedBy}",
+          "@readonly": true,
+          "@description": "{i18n>UserID.Description}",
+          "type": "User",
+          "length": 255
+        },
+        "ID": {
+          "@Core.Computed": true,
+          "key": true,
+          "type": "cds.UUID"
+        },
+        "fullName": {
+          "type": "cds.String"
+        },
+        "age": {
+          "type": "cds.Integer"
+        },
+        "value": {
+          "type": "cds.String"
+        },
+        "valueSys": {
+          "type": "cds.Integer"
+        },
+        "valueDia": {
+          "type": "cds.Integer"
+        },
+        "valuePulse": {
+          "type": "cds.Integer"
+        },
+        "overThreshold": {
+          "type": "cds.Boolean"
+        },
+        "type": {
+          "type": "cds.String"
+        },
+        "datetime": {
+          "type": "cds.DateTime"
+        },
+        "tableName": {
+          "type": "cds.String"
+        },
+        "code": {
+          "type": "cds.DateTime"
+        }
+      }
+    },
     "sap.ui.riskmanagement.Risks": {
       "kind": "entity",
       "includes": [
@@ -178,6 +272,249 @@
               ]
             }
           ]
+        }
+      }
+    },
+    "AlertService": {
+      "@source": "srv/alert-service.cds",
+      "kind": "service",
+      "@path": "service/alert"
+    },
+    "AlertService.Alerts": {
+      "kind": "entity",
+      "@odata.draft.enabled": true,
+      "@UI.HeaderInfo.TypeName": "{i18n>Figyelmeztets}",
+      "@UI.HeaderInfo.TypeNamePlural": "{i18n>Figyelmeztetsek}",
+      "@UI.HeaderInfo.Title.$Type": "UI.DataField",
+      "@UI.HeaderInfo.Title.Value": {
+        "=": "fullName"
+      },
+      "@UI.HeaderInfo.Description.$Type": "UI.DataField",
+      "@UI.HeaderInfo.Description.Value": {
+        "=": "value"
+      },
+      "@UI.SelectionFields": [
+        {
+          "=": "fullName"
+        }
+      ],
+      "@UI.LineItem": [
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "datetime"
+          },
+          "Label": "{i18n>MrsIdpontja}"
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "fullName"
+          },
+          "Label": "{i18n>Pciens}"
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "value"
+          },
+          "Label": "{i18n>MrtRtk}"
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "type"
+          },
+          "Label": "{i18n>MrsFajtja}"
+        }
+      ],
+      "@UI.FieldGroup#GeneratedGroup1.$Type": "UI.FieldGroupType",
+      "@UI.FieldGroup#GeneratedGroup1.Data": [
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "fullName"
+          },
+          "Label": "{i18n>Pciens}"
+        },
+        {
+          "$Type": "UI.DataField",
+          "Label": "{i18n>Age}",
+          "Value": {
+            "=": "age"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "value"
+          },
+          "Label": "{i18n>MrtRtk}"
+        },
+        {
+          "$Type": "UI.DataField",
+          "Label": "{i18n>Valuesys}",
+          "Value": {
+            "=": "valueSys"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Label": "{i18n>Valuedia}",
+          "Value": {
+            "=": "valueDia"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Label": "{i18n>Valuepulse}",
+          "Value": {
+            "=": "valuePulse"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Label": "{i18n>Overthreshold}",
+          "Value": {
+            "=": "overThreshold"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "type"
+          },
+          "Label": "{i18n>MrsFajtja}"
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "datetime"
+          },
+          "Label": "{i18n>MrsIdpontja}"
+        },
+        {
+          "$Type": "UI.DataField",
+          "Label": "{i18n>Tablename}",
+          "Value": {
+            "=": "tableName"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Label": "{i18n>Code}",
+          "Value": {
+            "=": "code"
+          }
+        }
+      ],
+      "@UI.Facets": [
+        {
+          "$Type": "UI.ReferenceFacet",
+          "ID": "GeneratedFacet1",
+          "Label": "{i18n>GeneralInformation}",
+          "Target": "@UI.FieldGroup#GeneratedGroup1"
+        }
+      ],
+      "projection": {
+        "from": {
+          "ref": [
+            "sap.ui.alertmanagement.Alerts"
+          ]
+        }
+      },
+      "elements": {
+        "createdAt": {
+          "@cds.on.insert": {
+            "=": "$now"
+          },
+          "@UI.HiddenFilter": true,
+          "@Core.Immutable": true,
+          "@title": "{i18n>CreatedAt}",
+          "@readonly": true,
+          "type": "cds.Timestamp"
+        },
+        "createdBy": {
+          "@cds.on.insert": {
+            "=": "$user"
+          },
+          "@UI.HiddenFilter": true,
+          "@Core.Immutable": true,
+          "@title": "{i18n>CreatedBy}",
+          "@readonly": true,
+          "@description": "{i18n>UserID.Description}",
+          "type": "User",
+          "length": 255
+        },
+        "modifiedAt": {
+          "@cds.on.insert": {
+            "=": "$now"
+          },
+          "@cds.on.update": {
+            "=": "$now"
+          },
+          "@UI.HiddenFilter": true,
+          "@title": "{i18n>ChangedAt}",
+          "@readonly": true,
+          "type": "cds.Timestamp"
+        },
+        "modifiedBy": {
+          "@cds.on.insert": {
+            "=": "$user"
+          },
+          "@cds.on.update": {
+            "=": "$user"
+          },
+          "@UI.HiddenFilter": true,
+          "@title": "{i18n>ChangedBy}",
+          "@readonly": true,
+          "@description": "{i18n>UserID.Description}",
+          "type": "User",
+          "length": 255
+        },
+        "ID": {
+          "@Core.Computed": true,
+          "key": true,
+          "type": "cds.UUID"
+        },
+        "fullName": {
+          "@title": "Páciens",
+          "@Common.Label": "{i18n>Pciens}",
+          "type": "cds.String"
+        },
+        "age": {
+          "type": "cds.Integer"
+        },
+        "value": {
+          "@title": "Mért érték",
+          "@UI.MultiLineText": true,
+          "type": "cds.String"
+        },
+        "valueSys": {
+          "type": "cds.Integer"
+        },
+        "valueDia": {
+          "type": "cds.Integer"
+        },
+        "valuePulse": {
+          "type": "cds.Integer"
+        },
+        "overThreshold": {
+          "type": "cds.Boolean"
+        },
+        "type": {
+          "@title": "Mérés fajtája",
+          "type": "cds.String"
+        },
+        "datetime": {
+          "@title": "Mérés időpontja",
+          "type": "cds.DateTime"
+        },
+        "tableName": {
+          "type": "cds.String"
+        },
+        "code": {
+          "type": "cds.DateTime"
         }
       }
     },

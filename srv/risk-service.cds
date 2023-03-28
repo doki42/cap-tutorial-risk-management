@@ -24,15 +24,5 @@ service RiskService {
     }
   ]) as projection on my.Mitigations;
     annotate Mitigations with @odata.draft.enabled;
-  entity Alerts @(restrict : [
-    {
-      grant : [ 'READ' ],
-      to: ['RiskViewer']
-    },
-    {
-      grant : [ '*' ],
-      to : [ 'RiskManager' ]
-    }
-  ]) as projection on my.Alerts
-    annotate Alerts with @odata.draft.enabled;
+  
 }

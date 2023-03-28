@@ -1,0 +1,25 @@
+COLUMN TABLE AlertService_Alerts_drafts (
+  createdAt TIMESTAMP NULL,
+  createdBy NVARCHAR(255) NULL,
+  modifiedAt TIMESTAMP NULL,
+  modifiedBy NVARCHAR(255) NULL,
+  ID NVARCHAR(36) NOT NULL,
+  fullName NVARCHAR(5000) NULL,
+  age INTEGER NULL,
+  value NVARCHAR(5000) NULL,
+  valueSys INTEGER NULL,
+  valueDia INTEGER NULL,
+  valuePulse INTEGER NULL,
+  overThreshold BOOLEAN NULL,
+  type NVARCHAR(5000) NULL,
+  "DATETIME" SECONDDATE NULL,
+  tableName NVARCHAR(5000) NULL,
+  code SECONDDATE NULL,
+  IsActiveEntity BOOLEAN,
+  HasActiveEntity BOOLEAN,
+  HasDraftEntity BOOLEAN,
+  DraftAdministrativeData_DraftUUID NVARCHAR(36) NOT NULL,
+  PRIMARY KEY(ID)
+) WITH ASSOCIATIONS (
+  MANY TO ONE JOIN AlertService_DraftAdministrativeData AS DraftAdministrativeData ON (DraftAdministrativeData.DraftUUID = DraftAdministrativeData_DraftUUID)
+)

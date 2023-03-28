@@ -1,0 +1,19 @@
+COLUMN TABLE sap_ui_alertmanagement_Alerts (
+  createdAt TIMESTAMP,
+  createdBy NVARCHAR(255),
+  modifiedAt TIMESTAMP,
+  modifiedBy NVARCHAR(255),
+  ID NVARCHAR(36) NOT NULL,
+  fullName NVARCHAR(5000),
+  age INTEGER,
+  value NVARCHAR(5000),
+  valueSys INTEGER,
+  valueDia INTEGER,
+  valuePulse INTEGER,
+  overThreshold BOOLEAN,
+  type NVARCHAR(5000),
+  "DATETIME" SECONDDATE,
+  tableName NVARCHAR(5000),
+  code SECONDDATE,
+  PRIMARY KEY(ID)
+)

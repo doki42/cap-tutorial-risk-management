@@ -1,13 +1,13 @@
 ## Application Details
 |               |
 | ------------- |
-|**Generation Date and Time**<br>Mon Mar 27 2023 14:52:33 GMT+0200 (Central European Summer Time)|
+|**Generation Date and Time**<br>Tue Mar 28 2023 09:30:03 GMT+0200 (Central European Summer Time)|
 |**App Generator**<br>@sap/generator-fiori-elements|
 |**App Generator Version**<br>1.9.2|
 |**Generation Platform**<br>Visual Studio Code|
 |**Template Used**<br>List Report Page V4|
 |**Service Type**<br>Local Cap|
-|**Service URL**<br>http://localhost:4004/service/risk/
+|**Service URL**<br>http://localhost:4004/service/alert/
 |**Module Name**<br>alerts|
 |**Application Title**<br>Alerts|
 |**Namespace**<br>ns|
