@@ -21,6 +21,13 @@ annotate RiskService.Mitigations with {
 	risks        @title: 'Risks';
 }
 
+annotate RiskService.Alerts with {
+	fullName       @title: 'Páciens';
+	datetime        @title: 'Mérés időpontja';
+	type       @title: 'Mérés fajtája';
+	value        @title: 'Mért érték';
+}
+
 annotate RiskService.Risks with @(
 	UI: {
 		HeaderInfo: {
@@ -90,3 +97,37 @@ annotate RiskService.Risks with {
 		}
 	);
 }
+
+annotate RiskService.Alerts with @(
+	UI: {
+		HeaderInfo: {
+			TypeName: 'Figyelmeztetés',
+			TypeNamePlural: 'Figyelmeztetések',
+			Title          : {
+                $Type : 'UI.DataField',
+                Value : fullName
+            },
+			Description : {
+				$Type: 'UI.DataField',
+				Value: value
+			}
+		},
+		SelectionFields: [fullName],
+		LineItem: [
+			{Value: fullName},
+			{Value: ID},
+			{
+				Value: value,
+			},
+			{
+				Value: type,
+			},
+			{
+				Value: datetime,
+			}
+		]
+		
+	},
+) {
+
+};
