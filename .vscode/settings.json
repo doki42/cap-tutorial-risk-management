@@ -19,5 +19,6 @@
     "typescript.format.placeOpenBraceOnNewLineForControlBlocks": true,
     "typescript.format.placeOpenBraceOnNewLineForFunctions": true,
     "typescript.inlayHints.enumMemberValues.enabled": true,
-    "typescript.inlayHints.functionLikeReturnTypes.enabled": true
+    "typescript.inlayHints.functionLikeReturnTypes.enabled": true,
+    "SAP HANA Database Explorer.displaySapWebAnalyticsStartupNotification": false
 }
